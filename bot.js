@@ -10,8 +10,6 @@ const bot = mineflayer.createBot({ //create and login bot
  	host: 'mc.politmine.ru',
 	version: '1.18.2', 
 	auth: 'offline',
-	//host: '192.168.0.103',
-	//port: 62820, 
 	username: 'Your username',
 	plugins: [AutoAuth],
 	AutoAuth: 
