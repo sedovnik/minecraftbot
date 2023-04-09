@@ -1,9 +1,9 @@
 # Minecraftbot short info
-Bot for server, created via mineflayer and some addition plugins
+A bot for minecraft servers created with mindflayer and some additional plugins
 
 History of project: <br>
-12.03.23 - First iteration of my bot <br>
-09.04.23 - Ver 0.2<br>
+12.03.23 - Ver. 0.1 <br>
+09.04.23 - Ver. 0.2 <br>
 New goals:<br>
 <strong>1-</strong> Add the ability for the bot to independently put things in the specified/nearest chest;<br>
 <strong>2-</strong> Add chat reading functionality. Some servers use different prefixes to nicknames, <br>
