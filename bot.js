@@ -1,65 +1,138 @@
+//init
 const mineflayer = require('mineflayer')
-const { pathfinder, Movements, goals } = require('mineflayer-pathfinder')
-const GoalFollow = goals.GoalFollow
-const GoalBlock = goals.GoalBlock
+const readline = require('readline');
 const AutoAuth = require('mineflayer-auto-auth')
-const inventoryViewer = require('mineflayer-web-inventory')
 
-const bot = mineflayer.createBot({ //create and login bot
-
- 	host: 'mc.politmine.ru',
-	version: '1.18.2', 
+const {pathfinder, Movements, goals: {GoalNear, GoalBlock, GoalFollow}} = require('mineflayer-pathfinder');
+//create bot
+const bot = mineflayer.createBot({
+ 	host: 'mc.politmine.ru', //any server u want to play, this is just for example
+	version: '1.16.4', 
 	auth: 'offline',
-	username: 'Your username',
+	username: 'bot_username',
 	plugins: [AutoAuth],
 	AutoAuth: 
 	{
         	logging: true,
-        	password: 'Your password',
+        	password: 'bot_password',
         	ignoreRepeat: true,
    	}
 
-})
+});
+bot.loadPlugin(pathfinder);
+const mcData = require('minecraft-data')(bot.version);
 
-bot.loadPlugin(pathfinder); //to find a way to mobs 
-const mineflayerViewer = require('prismarine-viewer').mineflayer //to watch loaded data
-inventoryViewer(bot) //to check bot's inventory
+//init console 
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
-bot.once('spawn', function (){
-	mineflayerViewer(bot, { firstPerson: false, port: 3007 }) 
-	bot.chat('/joinqueue august')
+//commands
+rl.on('line', (input) => {
+  if (input === 'start') {
+    startFishing();
+  } else if (input === 'stop') {
+    stopFishing();
+	} else if(input === 'items') {
+	console.log(bot.inventory.slots);
+  } else if(input === 'quit') {
+	  bot.quit();
+  } else if(input === 'login') {
+	 // if there are several server worlds and one lobby, you can use something similar to this command. it may differ on your server
+	bot.chat('/joinqueue server_name'); 
+  }  else if(input === 'come') {
+	goToPlayer('your_nickname');
+  } else {
+    console.log(`Unkown command: ${input}`);
+  }
+});
 
-	setInterval(() => {
-		const sword = bot.inventory.items().find(item => item.name.includes('sword'))
-        	if (sword) bot.equip(sword, 'hand') //check and equip sword
-		const mobFilter = e => e.type === 'mob' && e.mobType === 'Pig' | e.mobType === 'Cow' | e.mobType === 'Sheep' //filter to search only thease nobs
-                const mob = bot.nearestEntity(mobFilter) //focus on the nearest mob
+let nowFishing = false
 
-		if (!mob) {return}
+function onCollect (player, entity) {
+  if (entity.kind === 'Drops' && player === bot.entity) {
+    bot.removeListener('playerCollect', onCollect) 
+	  setTimeout(() => {
+	moveRandomly(bot, minX, minZ, maxX, maxZ); //coordinates of opposite corners of a rectangular area in which the bot will move in random directions
+  }, Math.floor(Math.random() * 1000) + 1000);
+	setTimeout(() => {
+    turnRandomly();
+  }, Math.floor(Math.random() * 1000) + 1000);
+    startFishing()
+}
+}
 
-		const mcData = require('minecraft-data')(bot.version)
-		const movements = new Movements(bot, mcData)
-		movements.scafoldingBlocks = []
-		bot.pathfinder.setMovements(movements)
 
-		const goal = new GoalFollow(mob, 1)
-		bot.pathfinder.setGoal(goal, true) //go to the nearest
-		
-		const pos = mob.position;
-		bot.lookAt(pos) //look at mob
-		bot.attack(mob); //attack mob
-		
-		}, 500); //delay 
-})
+
+
+async function startFishing () {
+  console.log('Fishing')
+   
+  try {
+    await bot.equip(bot.registry.itemsByName.fishing_rod.id, 'hand')
+  } catch (err) {
+    return console.log(err.message)
+  }
+
+  nowFishing = true
+  bot.on('playerCollect', onCollect)
+
+  try {
+    await bot.fish()
+  } catch (err) {
+    console.log(err.message)
+  }
+ 
+   nowFishing = false
+  
+}
+
+
+//stop fishing
+function stopFishing () {
+  bot.removeListener('playerCollect', onCollect)
+
+  if (nowFishing) {
+    bot.activateItem()
+  }
+}
+
+async function turnRandomly () {
+    const direction = Math.random() >= 0.1 ? 1 : -1; 
+    bot.look(bot.entity.yaw + (direction), 0, false); 
+}
+
+async function goToPlayer(playerName) {
+  const player = bot.players[playerName]
+  if (!player) {
+    console.log(`Player "${playerName}" is not online`)
+    return
+  }
+  if (!player.entity) {
+    console.log(`Player "${playerName}" entity is not loaded`)
+    return
+  }
+  const { position } = player.entity;
+  bot.pathfinder.setGoal(new GoalNear(position.x, position.y, position.z, 1));
+}
+
+async function moveRandomly(bot, minX, minZ, maxX, maxZ) {
+  const dx = Math.floor(Math.random() * 3) - 1; 
+  const dz = Math.floor(Math.random() * 3) - 1; 
+  const x = bot.entity.position.x + dx;
+  const z = bot.entity.position.z + dz;
+  if (x >= minX && x <= maxX && z >= minZ && z <= maxZ) {
+    const goal = new GoalBlock(x, bot.entity.position.y, z);
+    bot.pathfinder.setGoal(goal, true);
+  }
+}
+
+
+
 
 //error logging for simple debug
 bot.on('kicked', (reason, loggedIn) => console.log(reason, loggedIn))
 bot.on('error', err => console.log(err))
-
-
-
-
-
-
 
 
