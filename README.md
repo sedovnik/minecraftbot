@@ -10,10 +10,15 @@ This is a Node.js script that uses the mineflayer library to create a bot that c
 The script also includes a console interface that allows the user to send commands to the bot. The available commands are:
 
 -start: starts the fishing process
+
 -stop: stops the fishing process
+
 -items: displays the bot's inventory
+
 -quit: disconnects the bot from the server
+
 -login: joins a server queue
+
 -come: tells the bot to navigate to and follow the player 
 
 The script also includes event listeners for when the bot is kicked or experiences an error, which will log the error message to the console.
