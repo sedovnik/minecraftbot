@@ -1,7 +1,7 @@
 # Minecraftbot short info
 A bot for minecraft servers created with mindflayer and some additional plugins
 
-History of project: <br>
+Project history: <br>
 12.03.23 - Ver. 0.1 <br>
 09.04.23 - Ver. 0.2 <br>
 New goals:<br>
