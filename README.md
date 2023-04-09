@@ -1,4 +1,4 @@
-# Minecraftbot short info
+# Short info
 A bot for minecraft servers created with mindflayer and some additional plugins
 
 Project history: <br>
