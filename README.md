@@ -2,7 +2,7 @@
 Bot for server, created via mineflayer and some addition plugins
 
 History of project: <br>
-12.03.23 - First itteration of my bot <br>
+12.03.23 - First iteration of my bot <br>
 09.04.23 - Ver 0.2<br>
 New goals:<br>
 <strong>1-</strong> Add the ability for the bot to independently put things in the specified/nearest chest;<br>
