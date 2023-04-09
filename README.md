@@ -6,7 +6,9 @@ History of project: <br>
 09.04.23 - Ver 0.2<br>
 New goals:<br>
 <strong>1-</strong> Add the ability for the bot to independently put things in the specified/nearest chest;<br>
-<strong>2-</strong> Bugfix.
+<strong>2-</strong> Add chat reading functionality. Some servers use different prefixes to nicknames, <br>
+which requires adding the message function from mineflayer; <br>
+<strong>3-</strong> Bugfix.
 
 <h1 align="center">Minecraft autofish bot</h1> 
 
@@ -14,12 +16,12 @@ This is a Node.js script that uses the mineflayer library to create a bot that c
 
 The script also includes a console interface that allows the user to send commands to the bot. The available commands are:
 
-<strong>--start:</strong> starts the fishing process <br>
-<strong>--stop:</strong> stops the fishing process <br>
-<strong>--items:</strong> displays the bot's inventory <br>
-<strong>--quit:</strong> disconnects the bot from the server <br>
-<strong>--login:</strong> joins a server queue  <br>
-<strong>--come:</strong> tells the bot to navigate to and follow the player  <br>
+<strong>--start:</strong> Starts the fishing process <br>
+<strong>--stop:</strong> Stops the fishing process <br>
+<strong>--items:</strong> Displays the bot's inventory <br>
+<strong>--quit:</strong> Disconnects the bot from the server <br>
+<strong>--login:</strong> Joins a server queue  <br>
+<strong>--come:</strong> Tells the bot to navigate to and follow the player  <br>
 
 The script is designed to work with a Minecraft server hosted at mc.politmine.ru and uses version 1.16.4 of the game. To run the script, simply install the required packages and run the script with Node.js:
 ```
